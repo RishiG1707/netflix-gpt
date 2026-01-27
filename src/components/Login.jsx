@@ -7,9 +7,9 @@ import {
 	updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { BACKGROUND } from "../utils/constants";
 
 const Login = () => {
 	const [isSignInForm, setIsSignInForm] = useState(true);
@@ -19,7 +19,6 @@ const Login = () => {
 	const email = useRef(null);
 	const password = useRef(null);
 
-	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
 	const handleButtonClick = () => {
@@ -47,12 +46,10 @@ const Login = () => {
 						displayName: name.current.value,
 					})
 						.then(() => {
-							console.log(user);
 							const { uid, email, displayName } = auth.currentUser;
 							dispatch(
 								addUser({ uid: uid, email: email, displayName: displayName })
 							);
-							navigate("/browse");
 						})
 						.catch((error) => {
 							setErrorMessage(error.message);
@@ -74,8 +71,6 @@ const Login = () => {
 				.then((userCredential) => {
 					// Signed in
 					const user = userCredential.user;
-					console.log(user);
-					navigate("/browse");
 				})
 				.catch((error) => {
 					const errorCode = error.code;
@@ -93,10 +88,7 @@ const Login = () => {
 		<div>
 			<Header />
 			<div className="absolute">
-				<img
-					src="https://assets.nflxext.com/ffe/siteui/vlv3/e8136cfe-c5b7-464f-8c26-d68d676e0916/web/IN-en-20251229-TRIFECTA-perspective_c50c689c-0d42-413b-bd09-f4fc62fbec13_medium.jpg"
-					alt="background"
-				/>
+				<img src={BACKGROUND} alt="background" />
 			</div>
 			<form
 				onSubmit={(e) => e.preventDefault()}
